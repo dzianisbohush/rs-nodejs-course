@@ -12,15 +12,19 @@ const createUser = async user => {
 const getUserById = async id => USERS.find(user => user.id === id)
 
 const updateUser = async (id, updatedUserData) => {
+  let updatedUser = null
+
   USERS = USERS.map(user => {
     if(user.id  === id) {
-     return {...user, ...updatedUserData}
+      updatedUser = {...user, ...updatedUserData}
+
+     return updatedUser
     }
 
     return user
   })
 
-  return USERS.find(user => user.id === id);
+  return updatedUser
 };
 
 const deleteUserById = async () => {};

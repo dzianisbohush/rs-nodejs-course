@@ -15,15 +15,19 @@ const getBoardById = async id => BOARDS.find(board => board.id === id);
 
 
 const updateBoard = async (id, updatedBoardData) => {
+  let updatedBoard = null
+
   BOARDS = BOARDS.map(board => {
     if(board.id === id) {
-      return {...board, ...updatedBoardData}
+      updatedBoard = {...board, ...updatedBoardData}
+
+      return updatedBoard
     }
 
     return board
   })
 
-  return BOARDS.find(board => board.id === id)
+  return updatedBoard
 };
 
 const deleteBoardById = async () => {
