@@ -29,7 +29,7 @@ router.route('/').post(async (req, res) => {
   const task = await tasksService.createTask(req.params.boardId, req.body);
 
   if (task) {
-    res.status(200).send(Task.toResponse(task));
+    res.status(201).send(Task.toResponse(task));
   } else {
     res.status(404).end('Task is not created');
   }

@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const User = require('./user.model');
 const usersService = require('./user.service');
+const {TASKS} = require('../tasks/TasksData');
+const tasksService = require('../tasks/task.service');
 
 /**
  * GET All users
@@ -18,7 +20,7 @@ router.route('/').post(async (req, res) => {
   const user = await usersService.createUser(req.body);
 
   if (user) {
-    res.status(200).send(User.toResponse(user));
+    res.status(201).send(User.toResponse(user));
   } else {
     res.status(400).end('User is not created');
   }
@@ -55,9 +57,24 @@ router.route('/:id').put(async (req, res) => {
 /**
  * Delete user by id
  */
-router.route('/:id').delete(async () => {
-  // @todo When DELETEs User, all Tasks where User is assignee should be updated to put
-  //  userId = null.
+router.route('/:id').delete(async (req, res) => {
+  try {
+    const userId = req.params.id
+
+    // deleting user
+    await usersService.deleteUserById(userId)
+
+    // setting userId to null for deleted users tasks
+    TASKS.forEach(task => {
+      if(task.userId === userId) {
+        tasksService.updateTask(task.boardId, task.id, {...task, userId: null})
+      }
+    })
+
+    res.status(204).send('The user has been deleted');
+  } catch (e) {
+    res.status(404).end('User is not deleted');
+  }
 });
 
 module.exports = router;

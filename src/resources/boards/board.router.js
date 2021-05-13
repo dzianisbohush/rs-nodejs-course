@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const boardService = require('./board.service');
 const Board = require('./board.model');
+const {TASKS} = require('../tasks/TasksData');
+const tasksService = require('../tasks/task.service');
 
 /**
  * GET All boards
@@ -17,7 +19,7 @@ router.route('/').post(async (req, res) => {
   const newBoard = await boardService.addNewBoard(req.body);
 
   if(newBoard) {
-    res.status(200).send(Board.toResponse(newBoard));
+    res.status(201).send(Board.toResponse(newBoard));
   }else {
     res.status(404).end('Board is not created');
   }
@@ -50,11 +52,26 @@ router.route('/:id').put(async (req, res) => {
 });
 
 /**
- * DELETE border by id
+ * DELETE board by id
  */
-router.route('/:id').delete(async () => {
-// @TODO delete border by id
-  // When somebody DELETEs Board, all its Tasks should be deleted as well.
+router.route('/:id').delete(async (req, res) => {
+  try {
+    const boardId = req.params.id
+
+    // deleting board
+    await boardService.deleteBoardById(boardId)
+
+    // deleting tasks
+    TASKS.forEach(task => {
+      if(task.boardId === boardId) {
+        tasksService.deleteTaskById(boardId, task.id)
+      }
+    })
+
+    res.status(204).send('Board has been deleted');
+  } catch (e) {
+    res.status(404).end('Board has not been deleted')
+  }
 });
 
 module.exports = router;

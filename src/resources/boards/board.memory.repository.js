@@ -30,8 +30,12 @@ const updateBoard = async (id, updatedBoardData) => {
   return updatedBoard
 };
 
-const deleteBoardById = async () => {
-  // @todo delete implementation
+const deleteBoardById = async (id) => {
+  const indexOfBoardForDeleting = BOARDS.findIndex(board => board.id === id)
+
+  if(indexOfBoardForDeleting) {
+    BOARDS.splice(indexOfBoardForDeleting, 1)
+  }
 };
 
 module.exports = {
