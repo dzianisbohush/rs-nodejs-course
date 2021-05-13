@@ -1,12 +1,13 @@
 const Board = require('./board.model');
-let { BOARDS } = require('./BoardData');
+
+let BOARDS = []
 
 const getAll = async () => BOARDS
 
 const addNewBoard = async board => {
   const createdBoard = new Board(board);
 
-  BOARDS.push(new Board(board));
+  BOARDS.push(createdBoard);
 
   return createdBoard;
 };
@@ -33,7 +34,7 @@ const updateBoard = async (id, updatedBoardData) => {
 const deleteBoardById = async (id) => {
   const indexOfBoardForDeleting = BOARDS.findIndex(board => board.id === id)
 
-  if(indexOfBoardForDeleting) {
+  if(indexOfBoardForDeleting !== -1) {
     BOARDS.splice(indexOfBoardForDeleting, 1)
   }
 };
@@ -43,5 +44,6 @@ module.exports = {
   getBoardById,
   addNewBoard,
   updateBoard,
-  deleteBoardById
+  deleteBoardById,
+  BOARDS
 };

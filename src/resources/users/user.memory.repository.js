@@ -1,5 +1,6 @@
-let {USERS} = require('./UsersData')
 const User = require('./user.model')
+
+let USERS = []
 
 const getAll = async () => USERS
 
@@ -30,7 +31,7 @@ const updateUser = async (id, updatedUserData) => {
 const deleteUserById = async (id) => {
   const index = USERS.findIndex(user => user.id === id);
 
-  if(index) {
+  if(index !== -1) {
     USERS.splice(index, 1)
   }
 };
@@ -40,5 +41,6 @@ module.exports = {
   createUser,
   getUserById,
   updateUser,
-  deleteUserById
+  deleteUserById,
+  USERS
 };
