@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const User = require('./user.model');
 const usersService = require('./user.service');
-const {TASKS} = require('../tasks/task.memory.repository');
 const tasksService = require('../tasks/task.service');
 
 /**
@@ -65,11 +64,7 @@ router.route('/:id').delete(async (req, res) => {
     await usersService.deleteUserById(userId)
 
     // setting userId to null for deleted users tasks
-    TASKS.forEach(async (task) => {
-      if(task.userId === userId) {
-        await tasksService.updateTask(task.boardId, task.id, {...task, userId: null})
-      }
-    })
+     tasksService.unAssignUserId(userId)
 
     res.status(204).send('The user has been deleted');
   } catch (e) {

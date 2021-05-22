@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const boardService = require('./board.service');
 const Board = require('./board.model');
-const { TASKS } = require('../tasks/task.memory.repository');
 const tasksService = require('../tasks/task.service');
 
 /**
@@ -61,10 +60,8 @@ router.route('/:id').delete(async (req, res) => {
     // deleting board
     await boardService.deleteBoardById(boardId);
 
-    // deleting tasks
-    const tasksForDeleting = TASKS.filter(task => task.boardId === boardId);
-
-    await Promise.all(tasksForDeleting.map((task) => tasksService.deleteTaskById(boardId, task.id)));
+    // deleting tasks for particular board
+    await tasksService.deleteTasksForParticularBoardId(boardId)
 
     res.status(204).send('Board has been deleted');
   } catch (e) {

@@ -44,6 +44,5 @@ module.exports = {
   getBoardById,
   addNewBoard,
   updateBoard,
-  deleteBoardById,
-  BOARDS
+  deleteBoardById
 };

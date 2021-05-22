@@ -11,10 +11,16 @@ const updateTask = (boardId, taskId, updatedTask) =>
 
 const deleteTaskById = (boardId, taskId) => tasksRepository.deleteTaskById(boardId, taskId);
 
+const unAssignUserId = (userId) => tasksRepository.unAssignUserId(userId);
+
+const deleteTasksForParticularBoardId = (boardId) => tasksRepository.deleteTasksForParticularBoardId(boardId);
+
 module.exports = {
   getAll,
   getTaskById,
   createTask,
   updateTask,
-  deleteTaskById
+  deleteTaskById,
+  unAssignUserId,
+  deleteTasksForParticularBoardId
 };

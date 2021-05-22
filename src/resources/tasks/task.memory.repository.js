@@ -30,6 +30,14 @@ const updateTask = async (boardId, taskId, newTaskData) => {
   return updatedTask;
 };
 
+const unAssignUserId =  (userId) => {
+  TASKS.forEach(async (task) => {
+    if(task.userId === userId) {
+      await updateTask(task.boardId, task.id, {...task, userId: null})
+    }
+  })
+}
+
 const deleteTaskById = async (boardId, taskId) => {
   const indexOfDeletingTask = TASKS.findIndex(task => task.boardId === boardId && task.id === taskId);
 
@@ -38,11 +46,18 @@ const deleteTaskById = async (boardId, taskId) => {
   }
 };
 
+const deleteTasksForParticularBoardId = async (boardId) => {
+  const tasksForDeleting = TASKS.filter(task => task.boardId === boardId);
+
+  await Promise.all(tasksForDeleting.map((task) => deleteTaskById(boardId, task.id)));
+}
+
 module.exports = {
   getAll,
   getTaskById,
   createTask,
   updateTask,
   deleteTaskById,
-  TASKS
+  unAssignUserId,
+  deleteTasksForParticularBoardId
 };
