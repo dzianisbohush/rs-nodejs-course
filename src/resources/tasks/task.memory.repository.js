@@ -2,8 +2,23 @@ const Task = require('./task.model');
 
 let TASKS = []
 
+/**
+ * Getting all tasks for particular board id
+ *
+ * @category Resources / Task
+ * @param {string} boardId - board id
+ * @returns {Promise<Task[]>} list of tasks
+ */
 const getAll = async boardId => TASKS.filter(task => task.boardId === boardId);
 
+/**
+ * Adding new task
+ *
+ * @category Resources / Task
+ * @param {string} boardId - board id
+ * @param {Partial<Task>} task - new task data
+ * @returns {Promise<Task>} created task
+ */
 const createTask = async (boardId, task) => {
   const createdTask = new Task({ ...task, boardId });
 
@@ -12,8 +27,25 @@ const createTask = async (boardId, task) => {
   return createdTask;
 };
 
+/**
+ * Getting task by id
+ *
+ * @category Resources / Task
+ * @param {string} boardId - board id
+ * @param {string} taskId - task id
+ * @returns {Promise<Task>} found task
+ */
 const getTaskById = async (boardId, taskId) => TASKS.find(task => task.boardId === boardId && task.id === taskId);
 
+/**
+ * Updating task data
+ *
+ * @category Resources / Task
+ * @param {string} boardId - board id
+ * @param {string} taskId - task id
+ * @param {Partial<Task>} newTaskData - new task data
+ * @returns {Promise<Task>} updated task
+ */
 const updateTask = async (boardId, taskId, newTaskData) => {
   let updatedTask = null;
 
@@ -30,6 +62,12 @@ const updateTask = async (boardId, taskId, newTaskData) => {
   return updatedTask;
 };
 
+/**
+ * Unassigning user id for task
+ *
+ * @category Resources / Task
+ * @param {string} userId
+ */
 const unAssignUserId =  (userId) => {
   TASKS.forEach(async (task) => {
     if(task.userId === userId) {
@@ -38,6 +76,14 @@ const unAssignUserId =  (userId) => {
   })
 }
 
+/**
+ * Deleting task by id
+ *
+ * @category Resources / Task
+ * @param {string} boardId - board id
+ * @param {string} taskId - task id
+ * @returns {Promise<void>}
+ */
 const deleteTaskById = async (boardId, taskId) => {
   const indexOfDeletingTask = TASKS.findIndex(task => task.boardId === boardId && task.id === taskId);
 
@@ -46,6 +92,13 @@ const deleteTaskById = async (boardId, taskId) => {
   }
 };
 
+/**
+ * Deleting tasks when particular board is deleted
+ *
+ * @category Resources / Task
+ * @param {string} boardId - board id
+ * @returns {Promise<void>}
+ */
 const deleteTasksForParticularBoardId = async (boardId) => {
   const tasksForDeleting = TASKS.filter(task => task.boardId === boardId);
 

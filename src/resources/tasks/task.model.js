@@ -1,6 +1,22 @@
-const uuid = require('uuid').v4
+const uuid = require('uuid').v4;
 
+/**
+ * Task class
+ *
+ * @category Resources / Task
+ */
 class Task {
+  /**
+   * Create a task
+   *
+   * @param {string} id - task id
+   * @param {string} title - title id
+   * @param {number} order - task order
+   * @param {string} description - task description
+   * @param {string} userId - task user id
+   * @param {string} boardId - task board id
+   * @param {string} columnId - task column id
+   */
   constructor({
                 id = uuid(),
                 title = 'TASK title',
@@ -19,8 +35,14 @@ class Task {
     this.columnId = columnId;
   }
 
+  /**
+   * Return task data for response
+   *
+   * @param {Task} task
+   * @returns {Task}
+   */
   static toResponse(task) {
-    return task
+    return task;
   }
 }
 

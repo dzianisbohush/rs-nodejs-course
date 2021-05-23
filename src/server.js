@@ -3,6 +3,11 @@ const express = require('express');
 const loadersInit = require('./loaders');
 const { PORT } = require('./common/config');
 
+/**
+ * Starting server
+ *
+ * @returns {Promise<void>}
+ */
 const startServer = async () => {
   const app = express();
 

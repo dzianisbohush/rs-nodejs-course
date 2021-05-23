@@ -6,6 +6,12 @@ const userRouter = require('../resources/users/user.router');
 const boardRouter = require('../resources/boards/board.router');
 const tasksRouter = require('../resources/tasks/task.router');
 
+/**
+ * Loading express app
+ *
+ * @param app - express application
+ * @returns express application
+ */
 const expressLoader = async ({ app }) => {
   app.use(express.json());
 
