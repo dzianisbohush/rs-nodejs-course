@@ -1,6 +1,6 @@
-const Board = require('./board.model');
+import { Board } from './board.model.js';
 
-let BOARDS = []
+let BOARDS = [];
 
 /**
  * Getting all boards
@@ -8,7 +8,7 @@ let BOARDS = []
  * @category Resources / Board
  * @returns {Promise<Array<Board>>} list of boards
  */
-const getAll = async () => BOARDS
+export const getAll = async () => BOARDS;
 
 /**
  * Adding new board
@@ -17,7 +17,7 @@ const getAll = async () => BOARDS
  * @param {Board} board - new data for board
  * @returns {Promise<Board>} created board
  */
-const addNewBoard = async board => {
+export const addNewBoard = async board => {
   const createdBoard = new Board(board);
 
   BOARDS.push(createdBoard);
@@ -32,7 +32,7 @@ const addNewBoard = async board => {
  * @param {string} id - board id
  * @returns {Promise<Board>} found board
  */
-const getBoardById = async id => BOARDS.find(board => board.id === id);
+export const getBoardById = async id => BOARDS.find(board => board.id === id);
 
 /**
  * Updating board data
@@ -42,20 +42,20 @@ const getBoardById = async id => BOARDS.find(board => board.id === id);
  * @param updatedBoardData - new data for board
  * @returns {Promise<Board>} updated board data
  */
-const updateBoard = async (id, updatedBoardData) => {
-  let updatedBoard = null
+export const updateBoard = async (id, updatedBoardData) => {
+  let updatedBoard = null;
 
   BOARDS = BOARDS.map(board => {
-    if(board.id === id) {
-      updatedBoard = {...board, ...updatedBoardData}
+    if (board.id === id) {
+      updatedBoard = { ...board, ...updatedBoardData };
 
-      return updatedBoard
+      return updatedBoard;
     }
 
-    return board
-  })
+    return board;
+  });
 
-  return updatedBoard
+  return updatedBoard;
 };
 
 /**
@@ -65,18 +65,10 @@ const updateBoard = async (id, updatedBoardData) => {
  * @param {string} id - board id
  * @returns {Promise<void>}
  */
-const deleteBoardById = async (id) => {
-  const indexOfBoardForDeleting = BOARDS.findIndex(board => board.id === id)
+export const deleteBoardById = async (id) => {
+  const indexOfBoardForDeleting = BOARDS.findIndex(board => board.id === id);
 
-  if(indexOfBoardForDeleting !== -1) {
-    BOARDS.splice(indexOfBoardForDeleting, 1)
+  if (indexOfBoardForDeleting !== -1) {
+    BOARDS.splice(indexOfBoardForDeleting, 1);
   }
-};
-
-module.exports = {
-  getAll,
-  getBoardById,
-  addNewBoard,
-  updateBoard,
-  deleteBoardById
 };

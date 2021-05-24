@@ -1,11 +1,11 @@
-const uuid = require('uuid').v4;
+import { v4 } from 'uuid';
 
 /**
  * Task class
  *
  * @category Resources / Task
  */
-class Task {
+export class Task {
   /**
    * Create a task
    *
@@ -18,7 +18,7 @@ class Task {
    * @param {string} columnId - task column id
    */
   constructor({
-                id = uuid(),
+                id = v4(),
                 title = 'TASK title',
                 order = 0,
                 description = 'task description',
@@ -45,5 +45,3 @@ class Task {
     return task;
   }
 }
-
-module.exports = Task;

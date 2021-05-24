@@ -1,11 +1,11 @@
-const uuid = require('uuid').v4
+import { v4 } from 'uuid';
 
 /**
  * User class
  *
  * @category Resources / User
  */
-class User {
+export class User {
   /**
    * Create a user
    *
@@ -15,11 +15,11 @@ class User {
    * @param {string} password  - user password
    */
   constructor({
-    id = uuid(),
-    name = 'USER',
-    login = 'user',
-    password = 'P@55w0rd'
-  } = {}) {
+                id = v4(),
+                name = 'USER',
+                login = 'user',
+                password = 'P@55w0rd'
+              } = {}) {
     this.id = id;
     this.name = name;
     this.login = login;
@@ -37,5 +37,3 @@ class User {
     return { id, name, login };
   }
 }
-
-module.exports = User;

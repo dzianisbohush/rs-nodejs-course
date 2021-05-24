@@ -1,7 +1,9 @@
-const router = require('express').Router();
-const boardService = require('./board.service');
-const Board = require('./board.model');
-const tasksService = require('../tasks/task.service');
+import express from 'express';
+import * as  boardService from './board.service.js';
+import { Board } from './board.model.js';
+import * as tasksService from '../tasks/task.service.js';
+
+const router = express.Router();
 
 /**
  * GET All boards
@@ -61,7 +63,7 @@ router.route('/:id').delete(async (req, res) => {
     await boardService.deleteBoardById(boardId);
 
     // deleting tasks for particular board
-    await tasksService.deleteTasksForParticularBoardId(boardId)
+    await tasksService.deleteTasksForParticularBoardId(boardId);
 
     res.status(204).send('Board has been deleted');
   } catch (e) {
@@ -69,4 +71,4 @@ router.route('/:id').delete(async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

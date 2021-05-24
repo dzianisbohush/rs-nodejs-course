@@ -1,11 +1,11 @@
-const uuid = require('uuid').v4
+import { v4 } from 'uuid';
 
 /**
  * Board class
  *
  * @category Resources / Board
  */
-class Board {
+export class Board {
   /**
    * Create a board
    *
@@ -14,7 +14,7 @@ class Board {
    * @param {Array<Column>} columns - board columns
    */
   constructor({
-                id = uuid(),
+                id = v4(),
                 title = 'board title',
                 columns = []
               } = {}) {
@@ -30,8 +30,6 @@ class Board {
    * @returns {Board}
    */
   static toResponse(board) {
-    return board
+    return board;
   }
 }
-
-module.exports = Board;

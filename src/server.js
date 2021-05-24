@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
-const express = require('express');
-const loadersInit = require('./loaders');
-const { PORT } = require('./common/config');
+import express from 'express';
+import  {loadersInit}  from './loaders/index.js';
+import { CONFIG } from './common/config.js';
 
 /**
  * Starting server
@@ -13,13 +13,13 @@ const startServer = async () => {
 
   await loadersInit({ expressApp: app });
 
-  app.listen(PORT, (err) => {
+  app.listen(CONFIG.PORT, (err) => {
     if (err) {
       console.log(err);
       return;
     }
 
-    console.log(`App is running on http://localhost:${PORT}`);
+    console.log(`App is running on http://localhost:${CONFIG.PORT}`);
   });
 };
 

@@ -1,10 +1,11 @@
-const express = require('express');
-const swaggerUI = require('swagger-ui-express');
-const path = require('path');
-const YAML = require('yamljs');
-const userRouter = require('../resources/users/user.router');
-const boardRouter = require('../resources/boards/board.router');
-const tasksRouter = require('../resources/tasks/task.router');
+import express from 'express';
+import swaggerUI from 'swagger-ui-express';
+import path from 'path';
+import YAML from 'yamljs';
+import userRouter from '../resources/users/user.router.js';
+import boardRouter from '../resources/boards/board.router.js';
+import tasksRouter from '../resources/tasks/task.router.js';
+import {__dirname} from '../common/constants.js';
 
 /**
  * Loading express app
@@ -12,7 +13,7 @@ const tasksRouter = require('../resources/tasks/task.router');
  * @param app - express application
  * @returns express application
  */
-const expressLoader = async ({ app }) => {
+export const expressLoader = async ({ app }) => {
   app.use(express.json());
 
   const swaggerDocument = YAML.load(path.join(__dirname, '../../doc/api.yaml'));
@@ -38,4 +39,3 @@ const expressLoader = async ({ app }) => {
   return app;
 };
 
-module.exports = expressLoader;
