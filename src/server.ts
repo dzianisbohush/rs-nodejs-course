@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import express, {Application} from 'express';
-import  {loadersInit}  from './loaders/index';
+import  {loadersInit}  from './loaders';
 import { CONFIG } from './common/config';
 
 /**
