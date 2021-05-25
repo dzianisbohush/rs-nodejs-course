@@ -1,6 +1,6 @@
-import { User } from './user.model.js';
+import { User } from './user.model';
 
-let USERS = [];
+let USERS: User[] = [];
 
 /**
  * Getting all users
@@ -8,7 +8,7 @@ let USERS = [];
  * @category Resources / User
  * @returns {Promise<Array>} all users list
  */
-export const getAll = async () => USERS;
+export const getAll = async (): Promise<User[]> => USERS;
 
 /**
  * Adding new user
@@ -17,7 +17,7 @@ export const getAll = async () => USERS;
  * @param {User} user - new user data
  * @returns {Promise<User>} created user
  */
-export const createUser = async user => {
+export const createUser = async (user: Partial<User>): Promise<User> => {
   const createdUser = new User(user);
   USERS.push(createdUser);
 
@@ -31,7 +31,11 @@ export const createUser = async user => {
  * @param {string} id - id of  user
  * @returns {Promise<User>} user with particular id
  */
-export const getUserById = async id => USERS.find(user => user.id === id);
+export const getUserById = async (id: string): Promise<User | null> => {
+  const foundUser = USERS.find(user => user.id === id);
+
+  return foundUser || null;
+};
 
 /**
  * Updating user data
@@ -41,8 +45,8 @@ export const getUserById = async id => USERS.find(user => user.id === id);
  * @param {Partial<User>} updatedUserData - new user data
  * @returns {Promise<User>} updated user info
  */
-export const updateUser = async (id, updatedUserData) => {
-  let updatedUser = null;
+export const updateUser = async (id: string, updatedUserData: Partial<User>): Promise<User | null> => {
+  let updatedUser;
 
   USERS = USERS.map(user => {
     if (user.id === id) {
@@ -54,7 +58,7 @@ export const updateUser = async (id, updatedUserData) => {
     return user;
   });
 
-  return updatedUser;
+  return updatedUser || null;
 };
 
 /**
@@ -64,7 +68,7 @@ export const updateUser = async (id, updatedUserData) => {
  * @param {string} id - id of user
  * @returns {Promise<void>}
  */
-export const deleteUserById = async (id) => {
+export const deleteUserById = async (id: string): Promise<void> => {
   const index = USERS.findIndex(user => user.id === id);
 
   if (index !== -1) {

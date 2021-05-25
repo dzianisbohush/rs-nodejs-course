@@ -1,14 +1,14 @@
 import express from 'express';
-import { User } from './user.model.js';
-import * as usersService from './user.service.js';
-import { unAssignUserId } from '../tasks/task.service.js';
+import { User } from './user.model';
+import * as usersService from './user.service';
+import { unAssignUserId } from '../tasks/task.service';
 
 const router = express.Router();
 
 /**
  * GET All users
  */
-router.route('/').get(async (req, res) => {
+router.route('/').get(async (_, res) => {
   const users = await usersService.getAll();
   // map user fields to exclude secret fields like "password"
   res.json(users.map(User.toResponse));
@@ -31,7 +31,12 @@ router.route('/').post(async (req, res) => {
  * GET user by id
  */
 router.route('/:id').get(async (req, res) => {
-  const user = await usersService.getUserById(req.params.id);
+  let user;
+  const { id: userId } = req.params;
+
+  if (userId) {
+    user = await usersService.getUserById(userId);
+  }
 
   if (user) {
     res.status(200).send(User.toResponse(user));
@@ -44,7 +49,12 @@ router.route('/:id').get(async (req, res) => {
  * Update (PUT) user data
  */
 router.route('/:id').put(async (req, res) => {
-  const updatedUserData = await usersService.updateUser(req.params.id, req.body);
+  let updatedUserData;
+  const { id: userId } = req.params;
+
+  if (userId) {
+    updatedUserData = await usersService.updateUser(userId, req.body);
+  }
 
   if (updatedUserData) {
     res.status(200).send(User.toResponse(updatedUserData));
@@ -58,13 +68,15 @@ router.route('/:id').put(async (req, res) => {
  */
 router.route('/:id').delete(async (req, res) => {
   try {
-    const userId = req.params.id;
+    const { id: userId } = req.params;
 
-    // deleting user
-    await usersService.deleteUserById(userId);
+    if (userId) {
+      // deleting user
+      await usersService.deleteUserById(userId);
 
-    // setting userId to null for deleted users tasks
-    unAssignUserId(userId);
+      // setting userId to null for deleted users tasks
+      unAssignUserId(userId);
+    }
 
     res.status(204).send('The user has been deleted');
   } catch (e) {

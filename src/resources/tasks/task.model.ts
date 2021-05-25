@@ -6,6 +6,20 @@ import { v4 } from 'uuid';
  * @category Resources / Task
  */
 export class Task {
+  id: string;
+
+  title: string;
+
+  order: number;
+
+  description: string;
+
+  userId: string | null;
+
+  boardId: string;
+
+  columnId: string;
+
   /**
    * Create a task
    *
@@ -22,10 +36,18 @@ export class Task {
                 title = 'TASK title',
                 order = 0,
                 description = 'task description',
-                userId = 'user id',
+                userId = null,
                 boardId = 'board id',
                 columnId = 'column id'
-              } = {}) {
+              }: {
+    id?: string,
+    title?: string,
+    order?: number,
+    description?: string,
+    userId?: string | null,
+    boardId?: string,
+    columnId?: string
+  }) {
     this.id = id;
     this.title = title;
     this.order = order;
@@ -41,7 +63,7 @@ export class Task {
    * @param {Task} task
    * @returns {Task}
    */
-  static toResponse(task) {
+  static toResponse(task: Task) {
     return task;
   }
 }

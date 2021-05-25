@@ -1,7 +1,7 @@
 import express from 'express';
-import * as tasksService from './task.service.js';
-import { getBoardById } from '../boards/board.service.js';
-import { Task } from './task.model.js';
+import * as tasksService from './task.service';
+import { getBoardById } from '../boards/board.service';
+import { Task } from './task.model';
 
 const router = express.Router({ mergeParams: true });
 
@@ -9,18 +9,23 @@ const router = express.Router({ mergeParams: true });
  * GET All tasks for particular board id
  */
 router.route('/').get(async (req, res) => {
-  const board = await getBoardById(req.params.boardId);
+  let board;
+  const { boardId } = req.params;
 
-  if (!board) {
-    res.status(404).end('Board not found');
-  }
+  if (boardId) {
+    board = await getBoardById(boardId);
 
-  const allTasks = await tasksService.getAll(req.params.boardId);
+    if (!board) {
+      res.status(404).end('Board not found');
+    }
 
-  if (allTasks) {
-    res.status(200).send(allTasks.map(Task.toResponse));
-  } else {
-    res.status(404).end('Tasks not found');
+    const allTasks = await tasksService.getAll(boardId);
+
+    if (allTasks) {
+      res.status(200).send(allTasks.map(Task.toResponse));
+    } else {
+      res.status(404).end('Tasks not found');
+    }
   }
 });
 
@@ -28,7 +33,12 @@ router.route('/').get(async (req, res) => {
  * Create (POST) new task
  */
 router.route('/').post(async (req, res) => {
-  const task = await tasksService.createTask(req.params.boardId, req.body);
+  let task;
+  const { boardId } = req.params;
+
+  if (boardId) {
+    task = await tasksService.createTask(boardId, req.body);
+  }
 
   if (task) {
     res.status(201).send(Task.toResponse(task));
@@ -41,9 +51,12 @@ router.route('/').post(async (req, res) => {
  * GET Task by bord id and task id
  */
 router.route('/:taskId').get(async (req, res) => {
+  let task;
   const { boardId, taskId } = req.params;
 
-  const task = await tasksService.getTaskById(boardId, taskId);
+  if (boardId && taskId) {
+    task = await tasksService.getTaskById(boardId, taskId);
+  }
 
   if (task) {
     res.status(200).send(Task.toResponse(task));
@@ -56,9 +69,12 @@ router.route('/:taskId').get(async (req, res) => {
  * Update task (PUT)
  */
 router.route('/:taskId').put(async (req, res) => {
+  let task;
   const { body, params: { boardId, taskId } } = req;
 
-  const task = await tasksService.updateTask(boardId, taskId, body);
+  if (boardId && taskId) {
+    task = await tasksService.updateTask(boardId, taskId, body);
+  }
 
   if (task) {
     res.status(200).send(Task.toResponse(task));
@@ -74,9 +90,10 @@ router.route('/:taskId').delete(async (req, res) => {
   try {
     const { boardId, taskId } = req.params;
 
-    await tasksService.deleteTaskById(boardId, taskId);
-
-    res.status(204).send('The task has been deleted');
+    if (boardId && taskId) {
+      await tasksService.deleteTaskById(boardId, taskId);
+      res.status(204).send('The task has been deleted');
+    }
   } catch (e) {
     res.status(404).end('Task is not deleted');
   }
