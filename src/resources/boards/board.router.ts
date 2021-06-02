@@ -30,9 +30,9 @@ router.route('/').post(async (req, res) => {
 /**
  * GET board by id
  */
-router.route('/:id').get(async (req, res) => {
+router.route('/:boardId').get(async (req, res) => {
   let board;
-  const { id: boardId } = req.params;
+  const { boardId } = req.params;
 
   if (boardId) {
     board = await boardService.getBoardById(boardId);
@@ -48,9 +48,9 @@ router.route('/:id').get(async (req, res) => {
 /**
  * Update (PUT) board
  */
-router.route('/:id').put(async (req, res) => {
+router.route('/:boardId').put(async (req, res) => {
   let board;
-  const { id: boardId } = req.params;
+  const { boardId } = req.params;
 
   if (boardId) {
     board = await boardService.updateBoard(boardId, req.body);
@@ -66,9 +66,9 @@ router.route('/:id').put(async (req, res) => {
 /**
  * DELETE board by id
  */
-router.route('/:id').delete(async (req, res) => {
+router.route('/:boardId').delete(async (req, res) => {
   try {
-    const { id: boardId } = req.params;
+    const { boardId } = req.params;
 
     if (boardId) {
       // deleting board

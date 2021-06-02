@@ -31,9 +31,9 @@ router.route('/').post(async (req, res) => {
 /**
  * GET user by id
  */
-router.route('/:id').get(async (req, res) => {
+router.route('/:userId').get(async (req, res) => {
   let user;
-  const { id: userId } = req.params;
+  const { userId } = req.params;
 
   if (userId) {
     user = await usersService.getUserById(userId);
@@ -49,9 +49,9 @@ router.route('/:id').get(async (req, res) => {
 /**
  * Update (PUT) user data
  */
-router.route('/:id').put(async (req, res) => {
+router.route('/:userId').put(async (req, res) => {
   let updatedUserData;
-  const { id: userId } = req.params;
+  const { userId } = req.params;
 
   if (userId) {
     updatedUserData = await usersService.updateUser(userId, req.body);
@@ -67,9 +67,9 @@ router.route('/:id').put(async (req, res) => {
 /**
  * Delete user by id
  */
-router.route('/:id').delete(async (req, res) => {
+router.route('/:userId').delete(async (req, res) => {
   try {
-    const { id: userId } = req.params;
+    const { userId } = req.params;
 
     if (userId) {
       // deleting user
