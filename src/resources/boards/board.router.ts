@@ -1,4 +1,5 @@
 import express from 'express';
+import { StatusCodes } from 'http-status-codes';
 import * as  boardService from './board.service';
 import { Board } from './board.model';
 import * as tasksService from '../tasks/task.service';
@@ -20,9 +21,9 @@ router.route('/').post(async (req, res) => {
   const newBoard = await boardService.addNewBoard(req.body);
 
   if (newBoard) {
-    res.status(201).send(Board.toResponse(newBoard));
+    res.status(StatusCodes.CREATED).send(Board.toResponse(newBoard));
   } else {
-    res.status(404).end('Board is not created');
+    res.status(StatusCodes.NOT_FOUND).end('Board is not created');
   }
 });
 
@@ -38,9 +39,9 @@ router.route('/:id').get(async (req, res) => {
   }
 
   if (board) {
-    res.status(200).send(Board.toResponse(board));
+    res.status(StatusCodes.OK).send(Board.toResponse(board));
   } else {
-    res.status(404).end('Board not found');
+    res.status(StatusCodes.NOT_FOUND).end('Board not found');
   }
 });
 
@@ -56,9 +57,9 @@ router.route('/:id').put(async (req, res) => {
   }
 
   if (board) {
-    res.status(200).send(Board.toResponse(board));
+    res.status(StatusCodes.OK).send(Board.toResponse(board));
   } else {
-    res.status(404).end('Board is not updated');
+    res.status(StatusCodes.NOT_FOUND).end('Board is not updated');
   }
 });
 
@@ -76,10 +77,10 @@ router.route('/:id').delete(async (req, res) => {
       // deleting tasks for particular board
       await tasksService.deleteTasksForParticularBoardId(boardId);
 
-      res.status(204).send('Board has been deleted');
+      res.status(StatusCodes.NO_CONTENT).send('Board has been deleted');
     }
   } catch (e) {
-    res.status(404).end('Board has not been deleted');
+    res.status(StatusCodes.NOT_FOUND).end('Board has not been deleted');
   }
 });
 

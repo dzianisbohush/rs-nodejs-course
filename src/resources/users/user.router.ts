@@ -1,4 +1,5 @@
 import express from 'express';
+import { StatusCodes } from 'http-status-codes';
 import { User } from './user.model';
 import * as usersService from './user.service';
 import { unAssignUserId } from '../tasks/task.service';
@@ -21,9 +22,9 @@ router.route('/').post(async (req, res) => {
   const user = await usersService.createUser(req.body);
 
   if (user) {
-    res.status(201).send(User.toResponse(user));
+    res.status(StatusCodes.CREATED).send(User.toResponse(user));
   } else {
-    res.status(400).end('User is not created');
+    res.status(StatusCodes.BAD_REQUEST).end('User is not created');
   }
 });
 
@@ -39,9 +40,9 @@ router.route('/:id').get(async (req, res) => {
   }
 
   if (user) {
-    res.status(200).send(User.toResponse(user));
+    res.status(StatusCodes.OK).send(User.toResponse(user));
   } else {
-    res.status(404).end('User not found');
+    res.status(StatusCodes.NOT_FOUND).end('User not found');
   }
 });
 
@@ -57,9 +58,9 @@ router.route('/:id').put(async (req, res) => {
   }
 
   if (updatedUserData) {
-    res.status(200).send(User.toResponse(updatedUserData));
+    res.status(StatusCodes.OK).send(User.toResponse(updatedUserData));
   } else {
-    res.status(404).end('User not updated');
+    res.status(StatusCodes.NOT_FOUND).end('User not updated');
   }
 });
 
@@ -78,9 +79,9 @@ router.route('/:id').delete(async (req, res) => {
       unAssignUserId(userId);
     }
 
-    res.status(204).send('The user has been deleted');
+    res.status(StatusCodes.NO_CONTENT).send('The user has been deleted');
   } catch (e) {
-    res.status(404).end('User is not deleted');
+    res.status(StatusCodes.NOT_FOUND).end('User is not deleted');
   }
 });
 

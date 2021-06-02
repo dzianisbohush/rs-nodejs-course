@@ -1,4 +1,5 @@
 import express from 'express';
+import { StatusCodes } from 'http-status-codes';
 import * as tasksService from './task.service';
 import { getBoardById } from '../boards/board.service';
 import { Task } from './task.model';
@@ -16,15 +17,15 @@ router.route('/').get(async (req, res) => {
     board = await getBoardById(boardId);
 
     if (!board) {
-      res.status(404).end('Board not found');
+      res.status(StatusCodes.NOT_FOUND).end('Board not found');
     }
 
     const allTasks = await tasksService.getAll(boardId);
 
     if (allTasks) {
-      res.status(200).send(allTasks.map(Task.toResponse));
+      res.status(StatusCodes.OK).send(allTasks.map(Task.toResponse));
     } else {
-      res.status(404).end('Tasks not found');
+      res.status(StatusCodes.NOT_FOUND).end('Tasks not found');
     }
   }
 });
@@ -41,9 +42,9 @@ router.route('/').post(async (req, res) => {
   }
 
   if (task) {
-    res.status(201).send(Task.toResponse(task));
+    res.status(StatusCodes.CREATED).send(Task.toResponse(task));
   } else {
-    res.status(404).end('Task is not created');
+    res.status(StatusCodes.NOT_FOUND).end('Task is not created');
   }
 });
 
@@ -59,9 +60,9 @@ router.route('/:taskId').get(async (req, res) => {
   }
 
   if (task) {
-    res.status(200).send(Task.toResponse(task));
+    res.status(StatusCodes.OK).send(Task.toResponse(task));
   } else {
-    res.status(404).end('Task not found');
+    res.status(StatusCodes.NOT_FOUND).end('Task not found');
   }
 });
 
@@ -77,9 +78,9 @@ router.route('/:taskId').put(async (req, res) => {
   }
 
   if (task) {
-    res.status(200).send(Task.toResponse(task));
+    res.status(StatusCodes.OK).send(Task.toResponse(task));
   } else {
-    res.status(404).end('Task is not updated');
+    res.status(StatusCodes.NOT_FOUND).end('Task is not updated');
   }
 });
 
@@ -92,10 +93,10 @@ router.route('/:taskId').delete(async (req, res) => {
 
     if (boardId && taskId) {
       await tasksService.deleteTaskById(boardId, taskId);
-      res.status(204).send('The task has been deleted');
+      res.status(StatusCodes.NO_CONTENT).send('The task has been deleted');
     }
   } catch (e) {
-    res.status(404).end('Task is not deleted');
+    res.status(StatusCodes.NOT_FOUND).end('Task is not deleted');
   }
 });
 
