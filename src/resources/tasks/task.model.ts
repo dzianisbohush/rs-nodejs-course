@@ -1,10 +1,5 @@
 import { v4 } from 'uuid';
 
-/**
- * Task class
- *
- * @category Resources / Task
- */
 export class Task {
   id: string;
 
@@ -20,17 +15,6 @@ export class Task {
 
   columnId: string;
 
-  /**
-   * Create a task
-   *
-   * @param {string} id - task id
-   * @param {string} title - title id
-   * @param {number} order - task order
-   * @param {string} description - task description
-   * @param {string} userId - task user id
-   * @param {string} boardId - task board id
-   * @param {string} columnId - task column id
-   */
   constructor({
                 id = v4(),
                 title = 'TASK title',
@@ -57,12 +41,6 @@ export class Task {
     this.columnId = columnId;
   }
 
-  /**
-   * Return task data for response
-   *
-   * @param {Task} task
-   * @returns {Task}
-   */
   static toResponse(task: Task) {
     return task;
   }

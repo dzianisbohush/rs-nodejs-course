@@ -10,12 +10,6 @@ interface ExpressLoaderArgs {
   app: Application
 }
 
-/**
- * Loading express app
- *
- * @param app - express application
- * @returns express application
- */
 export const expressLoader = async ({ app }: ExpressLoaderArgs) : Promise<Application> => {
   app.use(express.json());
 
@@ -31,14 +25,13 @@ export const expressLoader = async ({ app }: ExpressLoaderArgs) : Promise<Applic
   });
 
   app.use('/users', userRouter);
-  //
+
   app.use('/boards', boardRouter);
-  //
+
   app.use('/boards/:boardId/tasks', tasksRouter);
 
   // PLACE FOR ANOTHER ROUTERS
 
-  // Return the express app
   return app;
 };
 
