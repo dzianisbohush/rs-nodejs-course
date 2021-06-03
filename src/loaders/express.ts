@@ -5,7 +5,7 @@ import YAML from 'yamljs';
 import userRouter from '../resources/users/user.router';
 import boardRouter from '../resources/boards/board.router';
 import tasksRouter from '../resources/tasks/task.router';
-import { logRequest } from '../middlewares/logger';
+import { logRequest, logError } from '../middlewares/logger';
 
 interface ExpressLoaderArgs {
   app: Application
@@ -38,6 +38,9 @@ export const expressLoader = async ({ app }: ExpressLoaderArgs): Promise<Applica
   app.use('/users', userRouter);
   app.use('/boards', boardRouter);
   app.use('/boards/:boardId/tasks', tasksRouter);
+
+  // Logging errors
+  app.use(logError);
 
   // PLACE FOR ANOTHER ROUTERS
 

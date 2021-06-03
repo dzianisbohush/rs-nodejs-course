@@ -24,7 +24,7 @@ const winstonLogger = createLogger({
 });
 
 export const logRequest = (req: Request, res: Response, next: NextFunction): void => {
-  if(req.body.password) {
+  if (req.body.password) {
     delete req.body.password;
   }
 
@@ -37,6 +37,22 @@ export const logRequest = (req: Request, res: Response, next: NextFunction): voi
     BODY: ${JSON.stringify(req.body)}
     STATUS CODE: ${res.statusCode}
 `
+  );
+
+  next();
+};
+
+export const logError = (err: Error, req: Request, res: Response, next: NextFunction) => {
+  winstonLogger.error(
+    `
+    TYPE: ${req.method}
+    URL: ${req.originalUrl}
+    BODY: ${JSON.stringify(req.body)}
+    STATUS CODE: ${res.statusCode}
+    ERROR MESSAGE: ${err.message}
+    ERROR DETAILS:
+    ${err.stack}
+    `
   );
 
   next();
