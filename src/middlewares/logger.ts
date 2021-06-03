@@ -1,5 +1,6 @@
 import { createLogger, transports, format } from 'winston';
 import { Request, Response, NextFunction } from 'express';
+import { ErrorWithStatus } from '../common/ErrorWithStatus';
 
 const winstonLogger = createLogger({
   level: 'info',
@@ -42,16 +43,14 @@ export const logRequest = (req: Request, res: Response, next: NextFunction): voi
   next();
 };
 
-export const logError = (err: Error, req: Request, res: Response, next: NextFunction) => {
+export const logError = (err: ErrorWithStatus, req: Request, _res: Response, next: NextFunction) => {
   winstonLogger.error(
     `
-    TYPE: ${req.method}
+    METHOD: ${req.method}
     URL: ${req.originalUrl}
     BODY: ${JSON.stringify(req.body)}
-    STATUS CODE: ${res.statusCode}
+    STATUS CODE: ${err.status}
     ERROR MESSAGE: ${err.message}
-    ERROR DETAILS:
-    ${err.stack}
     `
   );
 

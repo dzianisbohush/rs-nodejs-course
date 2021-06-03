@@ -3,6 +3,7 @@ import { StatusCodes, getReasonPhrase } from 'http-status-codes';
 import * as tasksService from './task.service';
 import { getBoardById } from '../boards/board.service';
 import { Task } from './task.model';
+import { ErrorWithStatus } from '../../common/ErrorWithStatus';
 
 const router = express.Router({ mergeParams: true });
 
@@ -28,9 +29,7 @@ router.route('/').get(async (req, res, next) => {
       if (allTasks) {
         res.status(StatusCodes.OK).send(allTasks.map(Task.toResponse));
       } else {
-        res.status(StatusCodes.NOT_FOUND).end(getReasonPhrase(StatusCodes.NOT_FOUND));
-
-        next(new Error(getReasonPhrase(StatusCodes.NOT_FOUND)));
+        next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
       }
     }
   } catch (err) {
@@ -53,9 +52,7 @@ router.route('/').post(async (req, res, next) => {
     if (task) {
       res.status(StatusCodes.CREATED).send(Task.toResponse(task));
     } else {
-      res.status(StatusCodes.NOT_FOUND).end(getReasonPhrase(StatusCodes.NOT_FOUND));
-
-      next(new Error(getReasonPhrase(StatusCodes.NOT_FOUND)));
+      next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
     }
   } catch (err) {
     next(err);
@@ -77,9 +74,7 @@ router.route('/:taskId').get(async (req, res, next) => {
     if (task) {
       res.status(StatusCodes.OK).send(Task.toResponse(task));
     } else {
-      res.status(StatusCodes.NOT_FOUND).end(getReasonPhrase(StatusCodes.NOT_FOUND));
-
-      next(new Error(getReasonPhrase(StatusCodes.NOT_FOUND)));
+      next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
     }
   } catch (err) {
     next(err);
@@ -101,9 +96,7 @@ router.route('/:taskId').put(async (req, res, next) => {
     if (task) {
       res.status(StatusCodes.OK).send(Task.toResponse(task));
     } else {
-      res.status(StatusCodes.NOT_FOUND).end(getReasonPhrase(StatusCodes.NOT_FOUND));
-
-      next(new Error(getReasonPhrase(StatusCodes.NOT_FOUND)));
+      next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
     }
   } catch (err) {
     next(err);

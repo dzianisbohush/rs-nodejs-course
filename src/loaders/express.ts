@@ -6,6 +6,7 @@ import userRouter from '../resources/users/user.router';
 import boardRouter from '../resources/boards/board.router';
 import tasksRouter from '../resources/tasks/task.router';
 import { logRequest, logError } from '../middlewares/logger';
+import { handleErrors} from '../middlewares/errorHandler';
 
 interface ExpressLoaderArgs {
   app: Application
@@ -39,8 +40,7 @@ export const expressLoader = async ({ app }: ExpressLoaderArgs): Promise<Applica
   app.use('/boards', boardRouter);
   app.use('/boards/:boardId/tasks', tasksRouter);
 
-  // Logging errors
-  app.use(logError);
+  app.use(handleErrors, logError);
 
   // PLACE FOR ANOTHER ROUTERS
 

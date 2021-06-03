@@ -3,6 +3,7 @@ import { StatusCodes, getReasonPhrase } from 'http-status-codes';
 import { User } from './user.model';
 import * as usersService from './user.service';
 import { unAssignUserId } from '../tasks/task.service';
+import { ErrorWithStatus } from '../../common/ErrorWithStatus';
 
 const router = express.Router();
 
@@ -29,9 +30,7 @@ router.route('/').post(async (req, res, next) => {
     if (user) {
       res.status(StatusCodes.CREATED).send(User.toResponse(user));
     } else {
-      res.status(StatusCodes.BAD_REQUEST).send(getReasonPhrase(StatusCodes.BAD_REQUEST));
-
-      next(new Error(getReasonPhrase(StatusCodes.NOT_FOUND)));
+      next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
     }
   } catch (err) {
     next(err);
@@ -53,9 +52,7 @@ router.route('/:userId').get(async (req, res, next) => {
     if (user) {
       res.status(StatusCodes.OK).send(User.toResponse(user));
     } else {
-      res.status(StatusCodes.NOT_FOUND).send(getReasonPhrase(StatusCodes.NOT_FOUND));
-
-      next(new Error(getReasonPhrase(StatusCodes.NOT_FOUND)));
+      next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
     }
   } catch (err) {
     next(err);
@@ -77,9 +74,7 @@ router.route('/:userId').put(async (req, res, next) => {
     if (updatedUserData) {
       res.status(StatusCodes.OK).send(User.toResponse(updatedUserData));
     } else {
-      res.status(StatusCodes.NOT_FOUND).send(getReasonPhrase(StatusCodes.NOT_FOUND));
-
-      next(new Error(getReasonPhrase(StatusCodes.NOT_FOUND)));
+      next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
     }
   } catch (err) {
     next(err);
