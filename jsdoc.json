@@ -1,0 +1,19 @@
+{
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc", "closure"]
+  },
+  "source": {
+    "include": ["src"],
+    "includePattern": "\\.(jsx|js|ts|tsx)$",
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "plugins": ["plugins/markdown", "better-docs/category", "better-docs/typescript"],
+
+  "opts": {
+    "template": "node_modules/better-docs",
+    "destination": "jsDocs",
+    "recurse": true,
+    "readme": "README.md"
+  }
+}
