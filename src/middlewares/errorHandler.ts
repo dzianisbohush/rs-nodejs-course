@@ -13,7 +13,7 @@ export const handleErrors = (err: ErrorWithStatus, _req: Request, res: Response,
   next({ ...err, message, status });
 };
 
-export const  handleUnhandledRejection = (reason:any) => {
+export const  handleUnhandledRejection = (reason:Error) => {
   logUnhandledRejection(reason);
 
   process.exit(1);

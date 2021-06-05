@@ -8,7 +8,7 @@ export const loadersInit = async ({ expressApp }: { expressApp: Application }) =
   await expressLoader({ app: expressApp });
 
   process
-    .on('unhandledRejection', (reason) => {
+    .on('unhandledRejection', (reason: Error) => {
       handleUnhandledRejection(reason)
     })
     .on('uncaughtException', (err: Error) => {
