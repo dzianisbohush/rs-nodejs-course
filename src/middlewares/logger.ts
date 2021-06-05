@@ -1,3 +1,4 @@
+import fs from 'fs'
 import { createLogger, transports, format } from 'winston';
 import { Request, Response, NextFunction } from 'express';
 import { ErrorWithStatus } from '../common/ErrorWithStatus';
@@ -55,4 +56,25 @@ export const logError = (err: ErrorWithStatus, req: Request, _res: Response, nex
   );
 
   next();
+};
+
+export const logUnhandledRejection = (reason: Error) => {
+  const message = `
+  UNHANDLED REJECTION ERROR: ${reason}
+  TIME: ${new Date()}
+  `
+
+  winstonLogger.error(`UNHANDLED REJECTION ERROR: ${message}`);
+
+  fs.writeFileSync('./logs/error.log', `UNHANDLED REJECTION ERROR: ${message}`)
+};
+
+export const logUncaughtException = (err: Error) => {
+  winstonLogger.error(
+    `
+  ERROR: ${err}
+  ERROR DETAILS:
+  ${err.stack}
+  `
+  );
 };

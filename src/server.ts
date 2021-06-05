@@ -14,3 +14,9 @@ const startServer = async (): Promise<void> => {
 };
 
 startServer();
+
+// setTimeout(() => {
+//   throw Error('Oops EXCEPTION!!!!!!!');
+// }, 3000)
+
+// Promise.reject(Error('Oops!'));

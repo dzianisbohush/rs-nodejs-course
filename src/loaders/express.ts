@@ -6,7 +6,7 @@ import userRouter from '../resources/users/user.router';
 import boardRouter from '../resources/boards/board.router';
 import tasksRouter from '../resources/tasks/task.router';
 import { logRequest, logError } from '../middlewares/logger';
-import { handleErrors} from '../middlewares/errorHandler';
+import { handleErrors } from '../middlewares/errorHandler';
 
 interface ExpressLoaderArgs {
   app: Application
