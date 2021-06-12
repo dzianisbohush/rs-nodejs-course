@@ -3,11 +3,6 @@ import express, {Application} from 'express';
 import  {loadersInit}  from './loaders';
 import { CONFIG } from './common/config';
 
-/**
- * Starting server
- *
- * @returns {Promise<void>}
- */
 const startServer = async (): Promise<void> => {
   const app: Application = express();
 
@@ -19,3 +14,9 @@ const startServer = async (): Promise<void> => {
 };
 
 startServer();
+
+// setTimeout(() => {
+//   throw Error('Oops EXCEPTION!!!!!!!');
+// }, 3000)
+
+// Promise.reject(Error('Oops!'));
