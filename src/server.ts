@@ -9,14 +9,8 @@ const startServer = async (): Promise<void> => {
   await loadersInit({ expressApp: app });
 
   app.listen(CONFIG.PORT, () => {
-    console.log(`App is running on http://localhost:${CONFIG.PORT}`);
+    console.log(`App is running on http://localhost:${CONFIG.PORT} `);
   });
 };
 
 startServer();
-
-// setTimeout(() => {
-//   throw Error('Oops EXCEPTION!!!!!!!');
-// }, 3000)
-
-// Promise.reject(Error('Oops!'));

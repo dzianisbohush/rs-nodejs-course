@@ -70,3 +70,8 @@ npm run lint
 Press <kbd>F5</kbd> to debug.
 
 For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+
+### Developing with Docker 
+1 - set you own values for environment variables in `.env` file
+
+2 - run Docker containers with command `docker-compose up`

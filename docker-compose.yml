@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: rest-service_app_container
+    image: rest-service_app
+    build: .
+    restart: always
+    depends_on:
+      - postgres
+    networks:
+      - backend-net
+    environment:
+      PORT: ${PORT}
+      NODE_ENV: ${NODE_ENV}
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT_INSIDE_CONTAINER}/${POSTGRES_DB}
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - .:/app/  #sync root directory with docker container
+      - /app/node_modules #exclude syncing node_modules with docker container
+
+  postgres:
+    container_name: pg_container
+    image: postgres
+    build: ./database/
+    restart: always
+    ports:
+      - ${POSTGRES_PORT_OUTSIDE_CONTAINER}:${POSTGRES_PORT_INSIDE_CONTAINER}
+    networks:
+      - backend-net
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ${POSTGRES_VOLUME_PATH}
+
+networks:
+  backend-net:
+    driver: bridge
+
