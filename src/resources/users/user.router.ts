@@ -1,6 +1,5 @@
 import express from 'express';
 import { StatusCodes, getReasonPhrase } from 'http-status-codes';
-import { User } from './user.model';
 import * as usersService from './user.service';
 import { unAssignUserId } from '../tasks/task.service';
 import { ErrorWithStatus } from '../../common/ErrorWithStatus';
@@ -13,8 +12,8 @@ const router = express.Router();
 router.route('/').get(async (_req, res, next) => {
   try {
     const users = await usersService.getAll();
-    // map user fields to exclude secret fields like "password"
-    res.json(users.map(User.toResponse));
+
+    res.json(users);
   } catch (err) {
     next(err);
   }
@@ -28,7 +27,7 @@ router.route('/').post(async (req, res, next) => {
     const user = await usersService.createUser(req.body);
 
     if (user) {
-      res.status(StatusCodes.CREATED).send(User.toResponse(user));
+      res.status(StatusCodes.CREATED).send(user);
     } else {
       next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
     }
@@ -50,7 +49,7 @@ router.route('/:userId').get(async (req, res, next) => {
     }
 
     if (user) {
-      res.status(StatusCodes.OK).send(User.toResponse(user));
+      res.status(StatusCodes.OK).send(user);
     } else {
       next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
     }
@@ -72,7 +71,7 @@ router.route('/:userId').put(async (req, res, next) => {
     }
 
     if (updatedUserData) {
-      res.status(StatusCodes.OK).send(User.toResponse(updatedUserData));
+      res.status(StatusCodes.OK).send(updatedUserData);
     } else {
       next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
     }

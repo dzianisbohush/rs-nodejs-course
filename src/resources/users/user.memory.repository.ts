@@ -1,42 +1,46 @@
-import { User } from './user.model';
+import { EntityRepository, Repository, getConnection } from 'typeorm';
+import { IUser, User } from './user.model';
 
-let USERS: User[] = [];
 
-export const getAll = async (): Promise<User[]> => USERS;
-
-export const createUser = async (user: Partial<User>): Promise<User> => {
-  const createdUser = new User(user);
-  USERS.push(createdUser);
-
-  return createdUser;
-};
-
-export const getUserById = async (id: string): Promise<User | null> => {
-  const foundUser = USERS.find(user => user.id === id);
-
-  return foundUser || null;
-};
-
-export const updateUser = async (id: string, updatedUserData: Partial<User>): Promise<User | null> => {
-  let updatedUser;
-
-  USERS = USERS.map(user => {
-    if (user.id === id) {
-      updatedUser = { ...user, ...updatedUserData };
-
-      return updatedUser;
-    }
-
-    return user;
-  });
-
-  return updatedUser || null;
-};
-
-export const deleteUserById = async (id: string): Promise<void> => {
-  const index = USERS.findIndex(user => user.id === id);
-
-  if (index !== -1) {
-    USERS.splice(index, 1);
+@EntityRepository(User)
+class UsersRepository extends Repository<User> {
+  getAll() {
+    return this.createQueryBuilder().getMany();
   }
-};
+
+  async createUser(user: Partial<IUser>) {
+    const {identifiers} = await this.createQueryBuilder()
+      .insert()
+      .into(User)
+      .values([user])
+      .execute();
+
+    return this.getUserById(identifiers[0]?.['id'])
+  }
+
+  getUserById(id: string) {
+    return this.createQueryBuilder('user')
+      .where('user.id = :id', { id })
+      .getOne();
+  }
+
+  async updateUser(id: string, updatedUser: Partial<IUser>) {
+    await this.createQueryBuilder()
+      .update(User)
+      .set(updatedUser)
+      .where('id = :id', { id })
+      .execute();
+
+    return this.getUserById(id)
+  }
+
+  deleteUserById(id: string) {
+    return this.createQueryBuilder()
+      .delete()
+      .from(User)
+      .where('id = :id', { id })
+      .execute();
+  }
+}
+
+export const usersRepository = getConnection().getCustomRepository(UsersRepository);

@@ -1,33 +1,26 @@
-import { v4 } from 'uuid';
+import {
+  Entity, PrimaryGeneratedColumn, Column
+} from 'typeorm';
 
-export class User {
+export interface IUser {
+  id: string;
+  name: string;
+  login: string;
+  password: string;
+}
+
+@Entity({ name: 'users' })
+export class User implements IUser{
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
+
+  @Column('varchar', { length: 255, default: 'USER' })
   name: string;
 
+  @Column('varchar', { length: 255, default: 'user' })
   login: string;
 
+  @Column('varchar', { length: 255, default: 'P@55w0rd', select: false })
   password: string;
-
-  constructor({
-                id = v4(),
-                name = 'USER',
-                login = 'user',
-                password = 'P@55w0rd'
-              }: {
-    id?: string,
-    name?: string,
-    login?: string,
-    password?: string
-  }) {
-    this.id = id;
-    this.name = name;
-    this.login = login;
-    this.password = password;
-  }
-
-  static toResponse(user: User): Partial<User> {
-    const { id, name, login } = user;
-    return { id, name, login };
-  }
 }

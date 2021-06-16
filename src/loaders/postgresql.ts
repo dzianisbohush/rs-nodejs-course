@@ -1,5 +1,6 @@
-import { createConnection } from "typeorm"
+import { createConnection, Connection } from "typeorm"
 import {CONFIG} from '../common/config'
+import {User} from '../resources/users/user.model';
 
 const {
   POSTGRES_USER,
@@ -8,19 +9,24 @@ const {
   POSTGRES_PORT
 } = CONFIG;
 
-export const postgresQLLoader = async (): Promise<void> => {
+export const postgresQLLoader = async (): Promise<Connection> => {
   try {
-    await createConnection({
+    const connection = await createConnection({
       type: "postgres",
       host: "localhost",
       port: POSTGRES_PORT ? +POSTGRES_PORT : 5432,
       username: POSTGRES_USER,
       password: POSTGRES_PASSWORD,
       database: POSTGRES_DB,
-      entities: [],
+      synchronize: true,
+      dropSchema: false,
+      logging: true,
+      entities: [User]
     });
 
     console.log('DB is connected successfully');
+
+    return connection
   } catch (err) {
     throw new Error(`
       DB is not connected. 
