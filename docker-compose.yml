@@ -13,7 +13,6 @@ services:
     environment:
       PORT: ${PORT}
       NODE_ENV: ${NODE_ENV}
-      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT_INSIDE_CONTAINER}/${POSTGRES_DB}
     ports:
       - ${PORT}:${PORT}
     volumes:
@@ -26,7 +25,7 @@ services:
     build: ./database/
     restart: always
     ports:
-      - ${POSTGRES_PORT_OUTSIDE_CONTAINER}:${POSTGRES_PORT_INSIDE_CONTAINER}
+      - ${POSTGRES_PORT}:${POSTGRES_PORT_INSIDE_CONTAINER}
     networks:
       - backend-net
     environment:

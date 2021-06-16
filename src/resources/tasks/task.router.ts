@@ -1,4 +1,4 @@
-import express from 'express';
+import express, {Request, Response, NextFunction} from 'express';
 import { StatusCodes, getReasonPhrase } from 'http-status-codes';
 import * as tasksService from './task.service';
 import { getBoardById } from '../boards/board.service';
@@ -10,7 +10,7 @@ const router = express.Router({ mergeParams: true });
 /**
  * GET All tasks for particular board id
  */
-router.route('/').get(async (req, res, next) => {
+router.route('/').get(async (req: Request, res: Response, next: NextFunction) => {
   try {
     let board;
     const { boardId } = req.params;
@@ -40,9 +40,10 @@ router.route('/').get(async (req, res, next) => {
 /**
  * Create (POST) new task
  */
-router.route('/').post(async (req, res, next) => {
+router.route('/').post(async (req: Request, res: Response, next: NextFunction) => {
   try {
     let task;
+
     const { boardId } = req.params;
 
     if (boardId) {
@@ -62,7 +63,7 @@ router.route('/').post(async (req, res, next) => {
 /**
  * GET Task by bord id and task id
  */
-router.route('/:taskId').get(async (req, res, next) => {
+router.route('/:taskId').get(async (req: Request, res: Response, next: NextFunction) => {
   try {
     let task;
     const { boardId, taskId } = req.params;
@@ -84,7 +85,7 @@ router.route('/:taskId').get(async (req, res, next) => {
 /**
  * Update task (PUT)
  */
-router.route('/:taskId').put(async (req, res, next) => {
+router.route('/:taskId').put(async (req: Request, res: Response, next: NextFunction) => {
   try {
     let task;
     const { body, params: { boardId, taskId } } = req;
@@ -106,7 +107,7 @@ router.route('/:taskId').put(async (req, res, next) => {
 /**
  * DELETE task by id
  */
-router.route('/:taskId').delete(async (req, res, next) => {
+router.route('/:taskId').delete(async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { boardId, taskId } = req.params;
 
