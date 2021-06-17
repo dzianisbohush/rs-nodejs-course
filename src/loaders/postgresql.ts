@@ -9,15 +9,15 @@ const {
   POSTGRES_USER,
   POSTGRES_PASSWORD,
   POSTGRES_DB,
-  POSTGRES_PORT
+  POSTGRES_PORT_INSIDE_CONTAINER
 } = CONFIG;
 
 export const postgresQLLoader = async (): Promise<Connection> => {
   try {
     const connection = await createConnection({
       type: "postgres",
-      host: "localhost",
-      port: POSTGRES_PORT ? +POSTGRES_PORT : 5432,
+      host: "postgres",
+      port: POSTGRES_PORT_INSIDE_CONTAINER ? +POSTGRES_PORT_INSIDE_CONTAINER : 5432,
       username: POSTGRES_USER,
       password: POSTGRES_PASSWORD,
       database: POSTGRES_DB,
