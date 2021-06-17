@@ -2,7 +2,6 @@ import express, {Request, Response, NextFunction} from 'express';
 import { StatusCodes, getReasonPhrase } from 'http-status-codes';
 import * as tasksService from './task.service';
 import { getBoardById } from '../boards/board.service';
-import { Task } from './task.model';
 import { ErrorWithStatus } from '../../common/ErrorWithStatus';
 
 const router = express.Router({ mergeParams: true });
@@ -27,7 +26,7 @@ router.route('/').get(async (req: Request, res: Response, next: NextFunction) =>
       const allTasks = await tasksService.getAll(boardId);
 
       if (allTasks) {
-        res.status(StatusCodes.OK).send(allTasks.map(Task.toResponse));
+        res.status(StatusCodes.OK).send(allTasks);
       } else {
         next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
       }
@@ -51,7 +50,7 @@ router.route('/').post(async (req: Request, res: Response, next: NextFunction) =
     }
 
     if (task) {
-      res.status(StatusCodes.CREATED).send(Task.toResponse(task));
+      res.status(StatusCodes.CREATED).send(task);
     } else {
       next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
     }
@@ -73,7 +72,7 @@ router.route('/:taskId').get(async (req: Request, res: Response, next: NextFunct
     }
 
     if (task) {
-      res.status(StatusCodes.OK).send(Task.toResponse(task));
+      res.status(StatusCodes.OK).send(task);
     } else {
       next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
     }
@@ -95,7 +94,7 @@ router.route('/:taskId').put(async (req: Request, res: Response, next: NextFunct
     }
 
     if (task) {
-      res.status(StatusCodes.OK).send(Task.toResponse(task));
+      res.status(StatusCodes.OK).send(task);
     } else {
       next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
     }

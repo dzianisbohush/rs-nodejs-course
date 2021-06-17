@@ -1,57 +1,67 @@
-import { Task } from './task.model';
+import { EntityRepository, Repository, getConnection } from 'typeorm';
+import { ITask, TaskModel } from './task.model';
 
-let TASKS: Task[] = [];
-
-export const getAll = async (boardId: string): Promise<Task[]> => TASKS.filter(task => task.boardId === boardId);
-
-export const createTask = async (boardId: string, task: Partial<Task>): Promise<Task> => {
-  const createdTask = new Task({ ...task, boardId });
-
-  TASKS.push(createdTask);
-
-  return createdTask;
-};
-
-export const getTaskById = async (boardId: string, taskId: string): Promise<Task | null> => {
-  const foundTask = TASKS.find(task => task.boardId === boardId && task.id === taskId);
-
-  return foundTask || null;
-};
-
-export const updateTask = async (boardId: string, taskId: string, newTaskData: Partial<Task>): Promise<Task | null> => {
-  let updatedTask;
-
-  TASKS = TASKS.map(task => {
-    if (task.boardId === boardId && task.id === taskId) {
-      updatedTask = { ...task, ...newTaskData };
-
-      return updatedTask;
-    }
-
-    return task;
-  });
-
-  return updatedTask || null;
-};
-
-export const unAssignUserId = (userId: string): void => {
-  TASKS.forEach(async (task) => {
-    if (task.userId === userId) {
-      await updateTask(task.boardId, task.id, { ...task, userId: null });
-    }
-  });
-};
-
-export const deleteTaskById = async (boardId: string, taskId: string): Promise<void> => {
-  const indexOfDeletingTask = TASKS.findIndex(task => task.boardId === boardId && task.id === taskId);
-
-  if (indexOfDeletingTask !== -1) {
-    TASKS.splice(indexOfDeletingTask, 1);
+@EntityRepository(TaskModel)
+class TasksRepository extends Repository<TaskModel> {
+  getAll(boardId: string) {
+    return this.createQueryBuilder('task')
+      .where('task.boardId = :boardId', { boardId })
+      .getMany();
   }
-};
 
-export const deleteTasksForParticularBoardId = async (boardId: string): Promise<void> => {
-  const tasksForDeleting = TASKS.filter(task => task.boardId === boardId);
+  async createTask(boardId: string, task: Partial<ITask>) {
+    const { generatedMaps } = await this.createQueryBuilder()
+      .insert()
+      .into(TaskModel)
+      .values([{ ...task, boardId }])
+      .execute();
 
-  await Promise.all(tasksForDeleting.map((task) => deleteTaskById(boardId, task.id)));
-};
+    return this.getTaskById(generatedMaps?.[0]?.['boardId'], generatedMaps?.[0]?.['id']);
+  }
+
+  getTaskById(boardId: string, taskId: string) {
+    return this.createQueryBuilder('task')
+      .where('task.boardId = :boardId', { boardId })
+      .andWhere('task.id = :taskId', { taskId })
+      .getOne();
+  }
+
+  async updateTask(boardId: string, taskId: string, updatedTask:Partial<ITask>){
+    await this.createQueryBuilder()
+      .update(TaskModel)
+      .set(updatedTask)
+      .where('boardId = :boardId', { boardId })
+      .andWhere('id = :taskId', { taskId })
+      .execute();
+
+    return this.getTaskById(boardId, taskId)
+  }
+
+  deleteTaskById(boardId: string, taskId: string) {
+    return this.createQueryBuilder()
+      .delete()
+      .from(TaskModel)
+      .where('boardId = :boardId', { boardId })
+      .andWhere('id = :taskId', { taskId })
+      .execute();
+  }
+
+  async unAssignUserId(userId: string) {
+    return this.createQueryBuilder()
+      .update(TaskModel)
+      .set({userId: null})
+      .where('userId = :userId', { userId })
+      .execute();
+  }
+
+
+  deleteTasksForParticularBoardId(boardId: string) {
+    return this.createQueryBuilder()
+      .delete()
+      .from(TaskModel)
+      .where('boardId = :boardId', { boardId })
+      .execute();
+  }
+}
+
+export const tasksRepository = getConnection().getCustomRepository(TasksRepository);

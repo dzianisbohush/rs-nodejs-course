@@ -3,6 +3,7 @@ import {CONFIG} from '../common/config'
 import {User} from '../resources/users/user.model';
 import { BoardModel } from '../resources/boards/board.model';
 import { ColumnModel } from '../resources/boards/column.model';
+import { TaskModel } from '../resources/tasks/task.model';
 
 const {
   POSTGRES_USER,
@@ -23,7 +24,7 @@ export const postgresQLLoader = async (): Promise<Connection> => {
       synchronize: true,
       dropSchema: false,
       logging: false,
-      entities: [User, BoardModel, ColumnModel]
+      entities: [User, BoardModel, ColumnModel, TaskModel]
     });
 
     console.log('DB is connected successfully');
