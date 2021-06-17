@@ -1,7 +1,6 @@
 import express from 'express';
 import { StatusCodes, getReasonPhrase } from 'http-status-codes';
 import * as  boardService from './board.service';
-import { Board } from './board.model';
 import * as tasksService from '../tasks/task.service';
 import { ErrorWithStatus } from '../../common/ErrorWithStatus';
 
@@ -13,7 +12,7 @@ const router = express.Router();
 router.route('/').get(async (_, res, next) => {
   try {
     const boards = await boardService.getAll();
-    res.json(boards.map(Board.toResponse));
+    res.json(boards);
   } catch (err) {
     next(err);
   }
@@ -27,7 +26,7 @@ router.route('/').post(async (req, res, next) => {
     const newBoard = await boardService.addNewBoard(req.body);
 
     if (newBoard) {
-      res.status(StatusCodes.CREATED).send(Board.toResponse(newBoard));
+      res.status(StatusCodes.CREATED).send(newBoard);
     } else {
       next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
     }
@@ -49,7 +48,7 @@ router.route('/:boardId').get(async (req, res, next) => {
     }
 
     if (board) {
-      res.status(StatusCodes.OK).send(Board.toResponse(board));
+      res.status(StatusCodes.OK).send(board);
     } else {
       next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
     }
@@ -71,7 +70,7 @@ router.route('/:boardId').put(async (req, res, next) => {
     }
 
     if (board) {
-      res.status(StatusCodes.OK).send(Board.toResponse(board));
+      res.status(StatusCodes.OK).send(board);
     } else {
       next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
     }

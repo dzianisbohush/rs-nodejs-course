@@ -1,28 +1,24 @@
-import { v4 } from 'uuid';
-import { Column } from './column.model';
+import {
+  Entity, PrimaryGeneratedColumn, Column, OneToMany
+} from 'typeorm';
+import { ColumnModel, IColumn } from './column.model';
 
-export class Board {
-  id: string = v4();
 
+export interface IBoard {
+  id: string,
+  title: string,
+  columns: IColumn[]
+}
+
+@Entity({ name: 'boards' })
+export class BoardModel implements IBoard{
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+
+  @Column('varchar', { length: 255, default: '' })
   title: string;
 
-  columns: Column[];
-
-  constructor({
-                id = v4(),
-                title = 'board title',
-                columns = []
-              }: {
-    id?: string,
-    title?: string,
-    columns?: Column[]
-  }) {
-    this.id = id;
-    this.title = title;
-    this.columns = columns;
-  }
-
-  static toResponse(board: Board): Board {
-    return board;
-  }
+  @OneToMany(() => ColumnModel, column => column.board)
+  columns: ColumnModel[];
 }

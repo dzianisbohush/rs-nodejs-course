@@ -1,21 +1,26 @@
-import { v4 } from 'uuid';
+import {
+  Entity, PrimaryGeneratedColumn, Column, ManyToOne
+} from 'typeorm';
+import { BoardModel, IBoard } from './board.model';
 
-export class Column {
+export interface IColumn {
+  id: string;
+  title: string;
+  order: number;
+  board: IBoard
+}
+
+@Entity({ name: 'columns' })
+export class ColumnModel implements IColumn{
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column('varchar', { length: 255, default: '' })
   title: string;
 
+  @Column('integer', { default: 0 })
   order: number;
 
-  constructor({ id = v4(), title = 'title of column', order = 0 }: {
-    id?: string, title?: string, order?: number
-  }) {
-    this.id = id;
-    this.title = title;
-    this.order = order;
-  }
-
-  static toResponse(column: Column): Column {
-    return column;
-  }
+  @ManyToOne(() => BoardModel, board => board.columns)
+  board: BoardModel;
 }

@@ -38,6 +38,9 @@
       "tryExtensions": [".ts"],
       "allowModules": ["express", "winston"]
 
-    }]
+    }],
+    "no-param-reassign": "warn",
+    "class-methods-use-this": "warn",
+    "import/no-cycle": "warn"
   }
 }

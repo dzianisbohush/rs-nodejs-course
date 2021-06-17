@@ -1,6 +1,8 @@
 import { createConnection, Connection } from "typeorm"
 import {CONFIG} from '../common/config'
 import {User} from '../resources/users/user.model';
+import { BoardModel } from '../resources/boards/board.model';
+import { ColumnModel } from '../resources/boards/column.model';
 
 const {
   POSTGRES_USER,
@@ -20,8 +22,8 @@ export const postgresQLLoader = async (): Promise<Connection> => {
       database: POSTGRES_DB,
       synchronize: true,
       dropSchema: false,
-      logging: true,
-      entities: [User]
+      logging: false,
+      entities: [User, BoardModel, ColumnModel]
     });
 
     console.log('DB is connected successfully');
