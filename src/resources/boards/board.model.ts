@@ -15,7 +15,6 @@ export class BoardModel implements IBoard{
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-
   @Column('varchar', { length: 255, default: '' })
   title: string;
 
