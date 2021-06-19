@@ -8,7 +8,6 @@ dotenv.config({
 const {
   PORT,
   NODE_ENV,
-  MONGO_CONNECTION_STRING,
   JWT_SECRET_KEY,
   AUTH_MODE
 } = process.env;
@@ -16,7 +15,6 @@ const {
 export const CONFIG = {
   PORT,
   NODE_ENV,
-  MONGO_CONNECTION_STRING,
   JWT_SECRET_KEY,
   AUTH_MODE: AUTH_MODE === 'true'
 };

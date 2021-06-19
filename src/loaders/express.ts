@@ -22,7 +22,7 @@ export const expressLoader = async ({ app }: ExpressLoaderArgs): Promise<Applica
   // Test route
   app.use('/', (req: Request, res: Response, next: NextFunction) => {
     if (req.originalUrl === '/') {
-      res.send('Service is running!');
+      res.send('Service is running!\n');
       return;
     }
     next();

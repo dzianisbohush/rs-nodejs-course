@@ -1,3 +1,5 @@
 node_modules
 .idea
 jsDocs
+database/postgres-data
+logs
