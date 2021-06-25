@@ -1,4 +1,4 @@
-import {boardsRepository } from './board.memory.repository';
+import {boardsRepository } from './board.repository';
 import { IBoard } from './board.model';
 
 export const getAll = () => boardsRepository.getAll();

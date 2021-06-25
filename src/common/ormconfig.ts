@@ -1,5 +1,5 @@
 import { ConnectionOptions } from 'typeorm';
-import { CONFIG } from '../common/config';
+import { CONFIG } from './config';
 import { User } from '../resources/users/user.model';
 import { BoardModel } from '../resources/boards/board.model';
 import { ColumnModel } from '../resources/boards/column.model';

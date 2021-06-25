@@ -1,4 +1,4 @@
-import {usersRepository} from './user.memory.repository';
+import {usersRepository} from './user.repository';
 import { IUser } from './user.model';
 
 export const getAll = () => usersRepository.getAll();
