@@ -28,6 +28,7 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "dot-notation": "off",
     "import/extensions": "off",
     "linebreak-style": "off",
     "node/no-unsupported-features/es-syntax": "off",
@@ -37,6 +38,9 @@
       "tryExtensions": [".ts"],
       "allowModules": ["express", "winston"]
 
-    }]
+    }],
+    "no-param-reassign": "warn",
+    "class-methods-use-this": "warn",
+    "import/no-cycle": "warn"
   }
 }

@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import "reflect-metadata"
 import express, {Application} from 'express';
 import  {loadersInit}  from './loaders';
 import { CONFIG } from './common/config';

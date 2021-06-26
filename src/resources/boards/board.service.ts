@@ -1,14 +1,14 @@
-import * as boardsRepo from './board.memory.repository';
-import { Board } from './board.model';
+import {boardsRepository } from './board.memory.repository';
+import { IBoard } from './board.model';
 
-export const getAll = () => boardsRepo.getAll();
+export const getAll = () => boardsRepository.getAll();
 
-export const addNewBoard = (board: Partial<Board>) => boardsRepo.addNewBoard(board);
+export const addNewBoard = (board: Partial<IBoard>) => boardsRepository.addNewBoard(board);
 
-export const getBoardById = (id: string) => boardsRepo.getBoardById(id);
+export const getBoardById = (id: string) => boardsRepository.getBoardById(id);
 
-export const updateBoard = (id: string, updatedBoard: Partial<Board>) =>
-  boardsRepo.updateBoard(id, updatedBoard);
+export const updateBoard = (id: string, updatedBoard: Partial<IBoard>) =>
+  boardsRepository.updateBoard(id, updatedBoard);
 
-export const deleteBoardById = (id: string) => boardsRepo.deleteBoardById(id);
+export const deleteBoardById = (id: string) => boardsRepository.deleteBoardById(id);
 

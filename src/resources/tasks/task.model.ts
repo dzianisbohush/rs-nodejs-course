@@ -1,47 +1,37 @@
-import { v4 } from 'uuid';
+import {
+  Entity, PrimaryGeneratedColumn, Column
+} from 'typeorm';
 
-export class Task {
+export interface ITask {
+  id: string;
+  title: string;
+  order: number;
+  description: string;
+  userId: string | null;
+  boardId: string | null;
+  columnId: string | null;
+}
+
+@Entity({ name: 'tasks' })
+export class TaskModel implements ITask{
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column('varchar', { length: 255, default: '' })
   title: string;
 
+  @Column('integer', { default: 0 })
   order: number;
 
+  @Column('varchar', { length: 255, default: '' })
   description: string;
 
+  @Column('varchar', { length: 255, default: null, nullable: true })
   userId: string | null;
 
-  boardId: string;
+  @Column('varchar', { length: 255, default: null, nullable: true })
+  boardId: string | null;
 
-  columnId: string;
-
-  constructor({
-                id = v4(),
-                title = 'TASK title',
-                order = 0,
-                description = 'task description',
-                userId = null,
-                boardId = 'board id',
-                columnId = 'column id'
-              }: {
-    id?: string,
-    title?: string,
-    order?: number,
-    description?: string,
-    userId?: string | null,
-    boardId?: string,
-    columnId?: string
-  }) {
-    this.id = id;
-    this.title = title;
-    this.order = order;
-    this.description = description;
-    this.userId = userId;
-    this.boardId = boardId;
-    this.columnId = columnId;
-  }
-
-  static toResponse(task: Task) {
-    return task;
-  }
+  @Column('varchar', { length: 255, default: null, nullable: true })
+  columnId: string | null;
 }

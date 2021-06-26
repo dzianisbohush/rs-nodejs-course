@@ -1,10 +1,11 @@
 import { Application } from 'express';
-import { expressLoader } from './express';
+import { postgresQLLoader } from './postgresql';
 import { handleUncaughtException , handleUnhandledRejection} from '../middlewares/errorHandler';
 
 export const loadersInit = async ({ expressApp }: { expressApp: Application }) => {
-  // PLACE FOR ANOTHER LOADERS INITIALIZATION
+  await postgresQLLoader();
 
+  const {expressLoader} = await import('./express');
   await expressLoader({ app: expressApp });
 
   process

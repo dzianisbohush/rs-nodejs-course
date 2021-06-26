@@ -1,44 +1,92 @@
-import { Board } from './board.model';
+import { EntityRepository, Repository, getConnection } from 'typeorm';
+import { BoardModel, IBoard } from './board.model';
+import { ColumnModel, IColumn } from './column.model';
 
-let BOARDS: Board[] = [];
+@EntityRepository(BoardModel)
+class BoardsRepository extends Repository<BoardModel> {
+  getAll() {
+    return this.createQueryBuilder('board')
+      .leftJoinAndSelect('board.columns', 'columns')
+      .getMany();
+  }
 
-export const getAll = async (): Promise<Board[]> => BOARDS
+  async addNewBoard({ title, columns }: Partial<IBoard>) {
+    const board = new BoardModel();
 
-export const addNewBoard = async (board: Partial<Board>): Promise<Board> => {
+    await this.setNewBoardData(board, title, columns);
 
-  const createdBoard = new Board(board);
+    return this.getBoardById(board.id);
+  }
 
-  BOARDS.push(createdBoard);
+  async getBoardById(id: string) {
+    return this.createQueryBuilder('board')
+      .leftJoinAndSelect('board.columns', 'columns')
+      .where('board.id = :id', { id })
+      .getOne();
+  }
 
-  return createdBoard;
-};
 
-export const getBoardById = async (id: string): Promise<Board | null> => {
-  const foundBoard = BOARDS.find(board => board.id === id);
+  async updateBoard(id: string, { title, columns }: Partial<IBoard>) {
+    await this.deleteColumnsForParticularBoardId(id);
 
-  return foundBoard || null;
-};
+    const exBoard = await this.createQueryBuilder('board')
+      .where('board.id = :id', { id })
+      .getOne();
 
-export const updateBoard = async (id: string, updatedBoardData: Partial<Board>): Promise<Board | null> => {
-  let updatedBoard;
+    if (exBoard) {
+      await this.setNewBoardData(exBoard, title, columns);
 
-  BOARDS = BOARDS.map(board => {
-    if (board.id === id) {
-      updatedBoard = { ...board, ...updatedBoardData };
-
-      return updatedBoard;
+      return this.getBoardById(id);
     }
 
-    return board;
-  });
-
-  return updatedBoard || null;
-};
-
-export const deleteBoardById = async (id: string): Promise<void> => {
-  const indexOfBoardForDeleting = BOARDS.findIndex(board => board.id === id);
-
-  if (indexOfBoardForDeleting !== -1) {
-    BOARDS.splice(indexOfBoardForDeleting, 1);
+    return null;
   }
-};
+
+  async deleteBoardById(id: string) {
+    await this.deleteColumnsForParticularBoardId(id);
+
+    return this.createQueryBuilder()
+      .delete()
+      .from(BoardModel)
+      .where('id = :id', { id })
+      .execute();
+  }
+
+  async deleteColumnsForParticularBoardId(id: string) {
+    const columns = await this.createQueryBuilder()
+      .relation(BoardModel, 'columns')
+      .of(id)
+      .loadMany();
+
+    await Promise.all(columns.map(async ({ id: columnId }) => {
+      await this.createQueryBuilder()
+        .delete()
+        .from(ColumnModel)
+        .where('id = :id', { id: columnId })
+        .execute();
+    }));
+  }
+
+  async setNewBoardData(board: BoardModel, title?: string, columns ?: IColumn[]) {
+    const connectionManager = getConnection().manager;
+
+    if (board) {
+      board.title = title || board.title || '';
+
+      await connectionManager.save(board);
+
+      if (columns) {
+        await Promise.all(columns.map(async ({ id: columnId, title: columnTitle, order }) => {
+          const column = new ColumnModel();
+          column.id = columnId;
+          column.title = columnTitle;
+          column.order = order;
+          column.board = board;
+          await connectionManager.save(column);
+        }));
+      }
+    }
+  }
+}
+
+export const boardsRepository = getConnection().getCustomRepository(BoardsRepository);
