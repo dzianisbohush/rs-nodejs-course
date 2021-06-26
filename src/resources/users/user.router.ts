@@ -3,6 +3,7 @@ import { StatusCodes, getReasonPhrase } from 'http-status-codes';
 import * as usersService from './user.service';
 import { unAssignUserId } from '../tasks/task.service';
 import { ErrorWithStatus } from '../../common/ErrorWithStatus';
+import { usersRepository } from './user.repository';
 
 const router = express.Router();
 
@@ -27,7 +28,7 @@ router.route('/').post(async (req, res, next) => {
     const user = await usersService.createUser(req.body);
 
     if (user) {
-      res.status(StatusCodes.CREATED).send(user);
+      res.status(StatusCodes.CREATED).send(usersRepository.toResponse(user));
     } else {
       next(new ErrorWithStatus(getReasonPhrase(StatusCodes.NOT_FOUND), StatusCodes.NOT_FOUND));
     }

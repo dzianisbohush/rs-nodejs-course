@@ -4,9 +4,11 @@ import path from 'path';
 import YAML from 'yamljs';
 import userRouter from '../resources/users/user.router';
 import boardRouter from '../resources/boards/board.router';
+import loginRouter from '../resources/login/login.router';
 import tasksRouter from '../resources/tasks/task.router';
 import { logRequest, logError } from '../middlewares/logger';
 import { handleErrors } from '../middlewares/errorHandler';
+import {authMiddleware} from '../resources/login/authentication';
 
 interface ExpressLoaderArgs {
   app: Application
@@ -36,9 +38,10 @@ export const expressLoader = async ({ app }: ExpressLoaderArgs): Promise<Applica
   ], logRequest);
 
   // Routes
-  app.use('/users', userRouter);
-  app.use('/boards', boardRouter);
-  app.use('/boards/:boardId/tasks', tasksRouter);
+  app.use('/users', authMiddleware, userRouter);
+  app.use('/login', loginRouter);
+  app.use('/boards', authMiddleware, boardRouter);
+  app.use('/boards/:boardId/tasks', authMiddleware, tasksRouter);
 
   app.use(handleErrors, logError);
 

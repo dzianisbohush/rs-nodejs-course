@@ -11,3 +11,13 @@ export const updateUser = (id: string, updatedUser: Partial<IUser>) => usersRepo
 
 export const deleteUserById = (id: string) => usersRepository.deleteUserById(id);
 
+export const getUserByLogin = (login: string) => usersRepository.getUserByLogin(login)
+
+export const createAdminUser = async () => {
+  const adminUser = await getUserByLogin("admin")
+
+  if(!adminUser){
+    await createUser({name: 'admin', login: "admin", password: "admin"})
+  }
+}
+

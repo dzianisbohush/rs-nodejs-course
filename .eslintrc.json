@@ -36,11 +36,12 @@
     "import/prefer-default-export": "off",
     "node/no-missing-import": ["error", {
       "tryExtensions": [".ts"],
-      "allowModules": ["express", "winston"]
+      "allowModules": ["express", "winston", "bcrypt"]
 
     }],
     "no-param-reassign": "warn",
     "class-methods-use-this": "warn",
-    "import/no-cycle": "warn"
+    "import/no-cycle": "warn",
+    "consistent-return": "warn"
   }
 }
