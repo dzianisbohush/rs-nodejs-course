@@ -1,6 +1,4 @@
-import {
-  Entity, PrimaryGeneratedColumn, Column
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 export interface IUser {
   id: string;
@@ -10,17 +8,18 @@ export interface IUser {
 }
 
 @Entity({ name: 'users' })
-export class User implements IUser{
+export class User implements IUser {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
 
   @Column('varchar', { length: 255, default: 'USER' })
   name: string;
 
-  @Column('varchar', { length: 255, default: 'user', unique: true })
+  //@todo return aftre auth
+  // @Column('varchar', { length: 255, default: 'user', unique: true })
+  @Column('varchar', { length: 255, default: 'user' })
   login: string;
 
-  @Column( )
+  @Column()
   password: string;
 }
