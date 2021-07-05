@@ -51,6 +51,11 @@
     ]
   },
   "dependencies": {
+    "@nestjs/common": "^7.6.15",
+    "@nestjs/config": "^0.6.3",
+    "@nestjs/core": "^7.6.15",
+    "@nestjs/platform-express": "^7.6.15",
+    "@nestjs/typeorm": "^7.1.5",
     "@types/jsonwebtoken": "^8.5.2",
     "bcrypt": "^5.0.1",
     "cross-env": "7.0.3",
@@ -59,17 +64,13 @@
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.6.0",
     "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
+    "rxjs": "^6.6.6",
     "swagger-ui-express": "4.1.6",
     "typeorm": "^0.2.34",
     "uuid": "8.3.2",
     "winston": "^3.3.3",
-    "yamljs": "0.3.0",
-    "@nestjs/common": "^7.6.15",
-    "@nestjs/core": "^7.6.15",
-    "@nestjs/platform-express": "^7.6.15",
-    "@nestjs/typeorm": "^7.1.5",
-    "rimraf": "^3.0.2",
-    "rxjs": "^6.6.6"
+    "yamljs": "0.3.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
