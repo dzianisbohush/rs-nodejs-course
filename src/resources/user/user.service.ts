@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
   ) {}
 
   getAll() {
@@ -21,7 +21,7 @@ export class UserService {
     } = await this.userRepository
       .createQueryBuilder()
       .insert()
-      .into(User)
+      .into(UserEntity)
       .values([user])
       .execute();
 
@@ -38,7 +38,7 @@ export class UserService {
   async updateUser(id: string, updatedUserData: UpdateUserDto) {
     await this.userRepository
       .createQueryBuilder()
-      .update(User)
+      .update(UserEntity)
       .set(updatedUserData)
       .where('id = :id', { id })
       .execute();
@@ -50,12 +50,12 @@ export class UserService {
     return this.userRepository
       .createQueryBuilder()
       .delete()
-      .from(User)
+      .from(UserEntity)
       .where('id = :id', { id })
       .execute();
   }
 
-  toResponse({ id, name, login }: User) {
+  toResponse({ id, name, login }: UserEntity) {
     return { id, name, login };
   }
 }

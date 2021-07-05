@@ -8,12 +8,16 @@ import {
   Delete,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { TaskService } from '../task/task.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly taskService: TaskService,
+  ) {}
 
   @Get()
   async getAllUsers() {
@@ -50,7 +54,9 @@ export class UserController {
   }
 
   @Delete(':id')
-  deleteUserById(@Param('id') id: string) {
-    return this.userService.deleteUserById(id);
+  async deleteUserById(@Param('id') id: string) {
+    await this.userService.deleteUserById(id);
+
+    this.taskService.unAssignUserId(id);
   }
 }

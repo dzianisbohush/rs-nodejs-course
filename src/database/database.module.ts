@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '../resources/user/user.entity';
+import { UserEntity } from '../resources/user/user.entity';
+import { BoardEntity } from '../resources/board/board.entity';
+import { ColumnEntity } from '../resources/board/column.entity';
+import { TaskEntity } from '../resources/task/task.entity';
 
 //@todo add env
 @Module({
@@ -12,7 +15,7 @@ import { User } from '../resources/user/user.entity';
       username: 'postgres',
       password: 'кщще',
       database: 'dbnest',
-      entities: [User],
+      entities: [UserEntity, BoardEntity, ColumnEntity, TaskEntity],
       synchronize: true,
     }),
   ],
