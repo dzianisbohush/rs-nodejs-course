@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
@@ -8,7 +9,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
   ) {}
 
   getAll() {
@@ -16,13 +18,18 @@ export class UserService {
   }
 
   async createUser(user: CreateUserDto) {
+    const userWithHashedPassword = {
+      ...user,
+      password: this.hashUserPassword(user.password as string),
+    };
+
     const {
       identifiers,
     } = await this.userRepository
       .createQueryBuilder()
       .insert()
       .into(UserEntity)
-      .values([user])
+      .values([userWithHashedPassword])
       .execute();
 
     return this.getUserById(identifiers[0]?.['id']);
@@ -53,6 +60,34 @@ export class UserService {
       .from(UserEntity)
       .where('id = :id', { id })
       .execute();
+  }
+
+  getUserByLogin(login: string) {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .where('user.login = :login', { login })
+      .getOne();
+  }
+
+  hashUserPassword(password: string) {
+    const { HASH_SALT } = process.env;
+
+    if (HASH_SALT) {
+      return bcrypt.hashSync(password, +HASH_SALT);
+    }
+    return '';
+  }
+
+  async createAdminUser() {
+    const adminUser = await this.getUserByLogin('admin');
+
+    if (!adminUser) {
+      this.createUser({
+        name: 'admin',
+        login: 'admin',
+        password: 'admin',
+      });
+    }
   }
 
   toResponse({ id, name, login }: UserEntity) {
