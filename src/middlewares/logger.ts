@@ -26,10 +26,6 @@ const winstonLogger = createLogger({
 });
 
 export const logRequest = (req: Request, res: Response, next: NextFunction): void => {
-  if (req.body.password) {
-    delete req.body.password;
-  }
-
   winstonLogger.info(
     `
     METHOD: ${req.method}

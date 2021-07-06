@@ -1,4 +1,4 @@
-import {tasksRepository} from './task.memory.repository';
+import {tasksRepository} from './task.repository';
 import { ITask } from './task.model';
 
 export const getAll = (boardId: string) => tasksRepository.getAll(boardId);
