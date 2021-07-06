@@ -21,13 +21,8 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     "no-param-reassign": "warn",
-    "class-methods-use-this": "warn",
+    "class-methods-use-this": "off",
     "import/no-cycle": "off",
-    "consistent-return": "warn",
-    // "node/no-missing-import": ["error", {
-    //   "tryExtensions": [".ts"],
-    //   "allowModules": ["express", "winston", "bcrypt"]
-    //
-    // }],
+    "consistent-return": "warn"
   },
 };

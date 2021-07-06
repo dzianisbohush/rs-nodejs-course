@@ -15,8 +15,7 @@ export class UserEntity implements IUser {
   @Column('varchar', { length: 255, default: 'USER' })
   name: string;
 
-  //@todo return aftre auth
-  // @Column('varchar', { length: 255, default: 'user', unique: true })
+  @Column('varchar', { length: 255, default: 'user', unique: true })
   @Column('varchar', { length: 255, default: 'user' })
   login: string;
 
